@@ -1,0 +1,1051 @@
+-- ========================================================
+--    ZETA HUB V2.2.2 — ULTIMATE MOBILE ELITE (FINAL)
+-- ========================================================
+
+local LinkvertiseURL = "https://link-hub.net/10082672/H7YSmQVixmzs"
+local CorrectKey = "ZETA-V2-ULTIMATE"
+local DiscordInvite = "discord.gg/NWkDhcG2p"
+
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- Limpieza previa de interfaces duplicadas
+pcall(function()
+    for _, v in ipairs(CoreGui:GetChildren()) do
+        if v.Name:match("Zeta") and v ~= script then
+            v:Destroy()
+        end
+    end
+end)
+
+-- // TABLA DE IDIOMAS MULTIIDIOMA REAL // --
+local currentLang = "es"
+local texts = {
+    es = {
+        combat = "Combate", visual = "Visuales", antilag = "Anti-Lag", settings = "Ajustes", discord = "Discord",
+        aimbotOn = "Aimbot NPCs: ON", aimbotOff = "Aimbot NPCs: OFF",
+        part = "Parte: ", head = "Cabeza", torso = "Torso", legs = "Piernas",
+        predOn = "Prediccion: ON", predOff = "Prediccion: OFF",
+        blocked = "⚠️ Trabajando en esto\nWorking on this...",
+        fovOn = "FOV Visual: ON", fovOff = "FOV Visual: OFF",
+        form = "Forma: ", circle = "Círculo", square = "Cuadrado",
+        rgbOn = "FOV RGB: ON", rgbOff = "FOV RGB: OFF",
+        whOn = "Wallhack: ON", whOff = "Wallhack: OFF",
+        color = "Color v", green = "Verde", red = "Rojo", blue = "Azul", rgb = "RGB",
+        alOn = "Anti-Lag Gama Baja: ON", alOff = "Anti-Lag Gama Baja: OFF",
+        copyDisc = "Copiar Link de Discord", copied = "¡Link copiado con exito!",
+        langTitle = "IDIOMA / LANGUAGE / 语言",
+        op = "OPERADOR: ", hp = "HP: ", vel = "VEL: ",
+        warn = "⚠️ ADVERTENCIA / WARNING\nNo abuses del script para evitar baneos."
+    },
+    en = {
+        combat = "Combat", visual = "Visuals", antilag = "Anti-Lag", settings = "Settings", discord = "Discord",
+        aimbotOn = "Aimbot NPCs: ON", aimbotOff = "Aimbot NPCs: OFF",
+        part = "Part: ", head = "Head", torso = "Torso", legs = "Legs",
+        predOn = "Prediction: ON", predOff = "Prediction: OFF",
+        blocked = "⚠️ Working on this\nWorking on this...",
+        fovOn = "Visual FOV: ON", fovOff = "Visual FOV: OFF",
+        form = "Shape: ", circle = "Circle", square = "Square",
+        rgbOn = "FOV RGB: ON", rgbOff = "FOV RGB: OFF",
+        whOn = "Wallhack: ON", whOff = "Wallhack: OFF",
+        color = "Color v", green = "Green", red = "Red", blue = "Blue", rgb = "RGB",
+        alOn = "Low-End Anti-Lag: ON", alOff = "Low-End Anti-Lag: OFF",
+        copyDisc = "Copy Discord Link", copied = "Link copied successfully!",
+        langTitle = "LANGUAGE / IDIOMA / 语言",
+        op = "OPERATOR: ", hp = "HP: ", vel = "SPD: ",
+        warn = "⚠️ WARNING / ADVERTENCIA\nDo not abuse the script to avoid bans."
+    },
+    fr = {
+        combat = "Combat", visual = "Visuels", antilag = "Anti-Lag", settings = "Paramètres", discord = "Discord",
+        aimbotOn = "Aimbot PNJ: ON", aimbotOff = "Aimbot PNJ: OFF",
+        part = "Partie: ", head = "Tête", torso = "Torse", legs = "Jambes",
+        predOn = "Prédiction: ON", predOff = "Prédiction: OFF",
+        blocked = "⚠️ En cours de travail\nWorking on this...",
+        fovOn = "FOV Visuel: ON", fovOff = "FOV Visuel: OFF",
+        form = "Forme: ", circle = "Cercle", square = "Carré",
+        rgbOn = "FOV RGB: ON", rgbOff = "FOV RGB: OFF",
+        whOn = "Wallhack: ON", whOff = "Wallhack: OFF",
+        color = "Couleur v", green = "Vert", red = "Rouge", blue = "Bleu", rgb = "RGB",
+        alOn = "Anti-Lag Basse Conso: ON", alOff = "Anti-Lag Basse Conso: OFF",
+        copyDisc = "Copier le lien Discord", copied = "Lien copié avec succès !",
+        langTitle = "LANGUE / LANGUAGE",
+        op = "OPÉRATEUR: ", hp = "PV: ", vel = "VIT: ",
+        warn = "⚠️ AVERTISSEMENT\nN'abusez pas du script pour éviter les bannissements."
+    },
+    de = {
+        combat = "Kampf", visual = "Visuell", antilag = "Anti-Lag", settings = "Einstellungen", discord = "Discord",
+        aimbotOn = "Aimbot NPCs: AN", aimbotOff = "Aimbot NPCs: AUS",
+        part = "Teil: ", head = "Kopf", torso = "Torso", legs = "Beine",
+        predOn = "Vorhersage: AN", predOff = "Vorhersage: AUS",
+        blocked = "⚠️ In Bearbeitung\nWorking on this...",
+        fovOn = "Visuelles FOV: AN", fovOff = "Visuelles FOV: AUS",
+        form = "Form: ", circle = "Kreis", square = "Quadrat",
+        rgbOn = "FOV RGB: AN", rgbOff = "FOV RGB: AUS",
+        whOn = "Wallhack: AN", whOff = "Wallhack: AUS",
+        color = "Farbe v", green = "Grün", red = "Rot", blue = "Blau", rgb = "RGB",
+        alOn = "Anti-Lag Low-End: AN", alOff = "Anti-Lag Low-End: AUS",
+        copyDisc = "Discord-Link kopieren", copied = "Link erfolgreich kopiert!",
+        langTitle = "SPRACHE / LANGUAGE",
+        op = "BENUTZER: ", hp = "LP: ", vel = "GESW: ",
+        warn = "⚠️ WARNUNG\nMissbrauche das Script nicht, um Banns zu vermeiden."
+    },
+    zh = {
+        combat = "战斗", visual = "视觉", antilag = "防卡顿", settings = "设置", discord = "Discord",
+        aimbotOn = "自瞄 NPCs: 开启", aimbotOff = "自瞄 NPCs: 关闭",
+        part = "部位: ", head = "头部", torso = "躯干", legs = "腿部",
+        predOn = "预判: 开启", predOff = "预判: 关闭",
+        blocked = "⚠️ 正在开发中\nWorking on this...",
+        fovOn = "FOV 视野: 开启", fovOff = "FOV 视野: 关闭",
+        form = "形状: ", circle = "圆形", square = "方形",
+        rgbOn = "FOV RGB: 开启", rgbOff = "FOV RGB: 关闭",
+        whOn = "透视: 开启", whOff = "透视: 关闭",
+        color = "颜色 v", green = "绿色", red = "红色", blue = "蓝色", rgb = "RGB",
+        alOn = "低配防卡顿: 开启", alOff = "低配防卡顿: 关闭",
+        copyDisc = "复制 Discord 链接", copied = "链接复制成功！",
+        langTitle = "语言 / LANGUAGE",
+        op = "操作员: ", hp = "生命: ", vel = "速度: ",
+        warn = "⚠️ 警告\n请勿滥用脚本以防被封号。"
+    }
+}
+
+local function T(key)
+    return texts[currentLang][key] or texts["es"][key] or key
+end
+
+-- // 1. PANTALLA DE CARGA ADAPTABLE // --
+local LoadGui = Instance.new("ScreenGui", CoreGui)
+LoadGui.Name = "ZetaLoadingV2"
+LoadGui.ResetOnSpawn = false
+
+local LoadFrame = Instance.new("Frame", LoadGui)
+LoadFrame.BackgroundColor3 = Color3.fromRGB(8, 10, 14)
+LoadFrame.Position = UDim2.new(0.5, -160, 0.5, -175)
+LoadFrame.Size = UDim2.new(0, 320, 0, 350)
+Instance.new("UICorner", LoadFrame).CornerRadius = UDim.new(0, 16)
+
+local RGBStroke = Instance.new("UIStroke", LoadFrame)
+RGBStroke.Thickness = 2
+RGBStroke.Color = Color3.fromRGB(0, 230, 118)
+
+task.spawn(function()
+    local hue = 0
+    while LoadFrame and LoadFrame.Parent do
+        hue = (hue + 0.03) % 1
+        RGBStroke.Color = Color3.fromHSV(hue, 1, 1)
+        task.wait(0.06)
+    end
+end)
+
+local LoadTitle = Instance.new("TextLabel", LoadFrame)
+LoadTitle.BackgroundTransparency = 1
+LoadTitle.Position = UDim2.new(0, 0, 0, 18)
+LoadTitle.Size = UDim2.new(1, 0, 0, 25)
+LoadTitle.Font = Enum.Font.GothamBold
+LoadTitle.Text = "ZETA HUB V2.2 — ELITE"
+LoadTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadTitle.TextSize, LoadTitle.TextXAlignment = 12, Enum.TextXAlignment.Center
+
+local AvatarImg = Instance.new("ImageLabel", LoadFrame)
+AvatarImg.BackgroundTransparency = 1
+AvatarImg.Position = UDim2.new(0.5, -26, 0.16, 0)
+AvatarImg.Size = UDim2.new(0, 52, 0, 52)
+pcall(function()
+    AvatarImg.Image = Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+end)
+Instance.new("UICorner", AvatarImg).CornerRadius = UDim.new(1, 0)
+local AvatarStroke = Instance.new("UIStroke", AvatarImg)
+AvatarStroke.Color = Color3.fromRGB(0, 230, 118)
+AvatarStroke.Thickness = 2
+
+local UserInfo = Instance.new("TextLabel", LoadFrame)
+UserInfo.BackgroundTransparency = 1
+UserInfo.Position = UDim2.new(0.05, 0, 0.36, 0)
+UserInfo.Size = UDim2.new(0.9, 0, 0, 50)
+UserInfo.Font = Enum.Font.GothamSemibold
+UserInfo.Text = "Operador: " .. LocalPlayer.Name .. "\nTikTok: @zeta hub\nMotor V2.2: Ultra Fluido"
+UserInfo.TextColor3 = Color3.fromRGB(210, 210, 210)
+UserInfo.TextSize, UserInfo.TextXAlignment = 10, Enum.TextXAlignment.Center
+
+local NotifBox = Instance.new("TextLabel", LoadFrame)
+NotifBox.BackgroundTransparency = 1
+NotifBox.Position = UDim2.new(0.05, 0, 0.58, 0)
+NotifBox.Size = UDim2.new(0.9, 0, 0, 30)
+NotifBox.Font = Enum.Font.GothamBold
+NotifBox.Text = "Cargando motor de rendimiento..."
+NotifBox.TextColor3 = Color3.fromRGB(255, 215, 0)
+NotifBox.TextSize = 10
+
+task.spawn(function()
+    task.wait(1)
+    NotifBox.Text = "Aplicando correcciones de FPS..."
+    NotifBox.TextColor3 = Color3.fromRGB(0, 230, 118)
+    task.wait(1)
+    NotifBox.Text = "¡Todo listo para operar!"
+    NotifBox.TextColor3 = Color3.fromRGB(0, 191, 255)
+end)
+
+local BarBackground = Instance.new("Frame", LoadFrame)
+BarBackground.BackgroundColor3 = Color3.fromRGB(20, 24, 33)
+BarBackground.Position = UDim2.new(0.08, 0, 0.80, 0)
+BarBackground.Size = UDim2.new(0.84, 0, 0, 8)
+Instance.new("UICorner", BarBackground).CornerRadius = UDim.new(1, 0)
+
+local BarFill = Instance.new("Frame", BarBackground)
+BarFill.BackgroundColor3 = Color3.fromRGB(0, 230, 118)
+BarFill.Size = UDim2.new(0, 0, 1, 0)
+Instance.new("UICorner", BarFill).CornerRadius = UDim.new(1, 0)
+
+TweenService:Create(BarFill, TweenInfo.new(2, Enum.EasingStyle.Linear), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+task.wait(2)
+LoadGui:Destroy()
+
+-- // 2. SISTEMA DE KEY + LINKVERTISE \\ --
+local KeySystemUI = Instance.new("ScreenGui", CoreGui)
+KeySystemUI.Name = "ZetaKeyV2"
+KeySystemUI.ResetOnSpawn = false
+
+local KeyFrame = Instance.new("Frame", KeySystemUI)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(10, 12, 18)
+KeyFrame.Position = UDim2.new(0.5, -160, 0.5, -175)
+KeyFrame.Size = UDim2.new(0, 320, 0, 350)
+KeyFrame.Active = true
+KeyFrame.Draggable = true
+Instance.new("UICorner", KeyFrame).CornerRadius = UDim.new(0, 16)
+
+local HackerStroke = Instance.new("UIStroke", KeyFrame)
+HackerStroke.Thickness = 2
+HackerStroke.Color = Color3.fromRGB(0, 255, 65)
+
+local KeyTitle = Instance.new("TextLabel", KeyFrame)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Position = UDim2.new(0, 0, 0, 30)
+KeyTitle.Size = UDim2.new(1, 0, 0, 25)
+KeyTitle.Font = Enum.Font.Code
+KeyTitle.Text = "[ KEY_SYSTEM // ZETA_V2.2 ]"
+KeyTitle.TextColor3 = Color3.fromRGB(0, 255, 65)
+KeyTitle.TextSize, KeyTitle.TextXAlignment = 12, Enum.TextXAlignment.Center
+
+local KeySubtitle = Instance.new("TextLabel", KeyFrame)
+KeySubtitle.BackgroundTransparency = 1
+KeySubtitle.Position = UDim2.new(0, 0, 0, 75)
+KeySubtitle.Size = UDim2.new(1, 0, 0, 20)
+KeySubtitle.Font = Enum.Font.Code
+KeySubtitle.Text = "> Ingresa tu Key para acceder:"
+KeySubtitle.TextColor3 = Color3.fromRGB(150, 200, 150)
+KeySubtitle.TextSize, KeySubtitle.TextXAlignment = 10, Enum.TextXAlignment.Center
+
+local KeyInput = Instance.new("TextBox", KeyFrame)
+KeyInput.BackgroundColor3 = Color3.fromRGB(15, 18, 25)
+KeyInput.Position = UDim2.new(0.1, 0, 0.33, 0)
+KeyInput.Size = UDim2.new(0.8, 0, 0, 40)
+KeyInput.Font = Enum.Font.Code
+KeyInput.PlaceholderText = "Pega tu Key aquí..."
+KeyInput.Text = ""
+KeyInput.TextColor3 = Color3.fromRGB(0, 255, 65)
+KeyInput.TextSize = 11
+Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
+
+local VerifyBtn = Instance.new("TextButton", KeyFrame)
+VerifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 80)
+VerifyBtn.Position = UDim2.new(0.1, 0, 0.53, 0)
+VerifyBtn.Size = UDim2.new(0.8, 0, 0, 40)
+VerifyBtn.Font = Enum.Font.Code
+VerifyBtn.Text = "[ VERIFICAR KEY ]"
+VerifyBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+VerifyBtn.TextSize = 12
+Instance.new("UICorner", VerifyBtn).CornerRadius = UDim.new(0, 8)
+
+local GetKeyBtn = Instance.new("TextButton", KeyFrame)
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
+GetKeyBtn.Position = UDim2.new(0.1, 0, 0.72, 0)
+GetKeyBtn.Size = UDim2.new(0.8, 0, 0, 35)
+GetKeyBtn.Font = Enum.Font.Code
+GetKeyBtn.Text = "🔗 Obtener Key (Linkvertise)"
+GetKeyBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
+GetKeyBtn.TextSize = 11
+Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 6)
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then setclipboard(LinkvertiseURL) end
+    GetKeyBtn.Text = "✅ ¡Link copiado al portapapeles!"
+    task.wait(2)
+    GetKeyBtn.Text = "🔗 Obtener Key (Linkvertise)"
+end)
+
+VerifyBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == CorrectKey then
+        KeySystemUI:Destroy()
+
+        -- // 3. MENÚ PRINCIPAL V2.2 (320x350 px) // --
+        local HubGui = Instance.new("ScreenGui", CoreGui)
+        HubGui.Name = "ZetaMenuV2"
+        HubGui.ResetOnSpawn = false
+
+        local activeConnections = {}
+
+        -- Botón Flotante
+        local ToggleLogo = Instance.new("TextButton", HubGui)
+        ToggleLogo.BackgroundColor3 = Color3.fromRGB(12, 15, 22)
+        ToggleLogo.Position = UDim2.new(0.02, 0, 0.15, 0)
+        ToggleLogo.Size = UDim2.new(0, 44, 0, 44)
+        ToggleLogo.Active = true
+        ToggleLogo.Draggable = true
+        ToggleLogo.Font = Enum.Font.FredokaOne
+        ToggleLogo.Text = "Z"
+        ToggleLogo.TextColor3 = Color3.fromRGB(0, 230, 118)
+        ToggleLogo.TextSize = 24
+        Instance.new("UICorner", ToggleLogo).CornerRadius = UDim.new(1, 0)
+        local LogoStroke = Instance.new("UIStroke", ToggleLogo)
+        LogoStroke.Color = Color3.fromRGB(0, 230, 118)
+        LogoStroke.Thickness = 2
+
+        -- Notificación Anti-Ban a los 60 segundos de uso
+        task.delay(60, function()
+            if HubGui and HubGui.Parent then
+                local BanWarn = Instance.new("Frame", HubGui)
+                BanWarn.BackgroundColor3 = Color3.fromRGB(20, 10, 10)
+                BanWarn.Position = UDim2.new(0.5, -140, 0.02, 0)
+                BanWarn.Size = UDim2.new(0, 280, 0, 50)
+                Instance.new("UICorner", BanWarn).CornerRadius = UDim.new(0, 8)
+                local WarnStroke = Instance.new("UIStroke", BanWarn)
+                WarnStroke.Color = Color3.fromRGB(255, 50, 50)
+
+                local WarnTxt = Instance.new("TextLabel", BanWarn)
+                WarnTxt.BackgroundTransparency = 1
+                WarnTxt.Size = UDim2.new(1, 0, 1, 0)
+                WarnTxt.Font = Enum.Font.GothamBold
+                WarnTxt.Name = "WarnTextElement"
+                WarnTxt.Text = T("warn")
+                WarnTxt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                WarnTxt.TextSize, WarnTxt.TextXAlignment = 8, Enum.TextXAlignment.Center
+
+                task.delay(8, function()
+                    if BanWarn and BanWarn.Parent then BanWarn:Destroy() end
+                end)
+            end
+        end)
+
+        local MainMenu = Instance.new("Frame", HubGui)
+        MainMenu.BackgroundColor3 = Color3.fromRGB(8, 10, 15)
+        MainMenu.Position = UDim2.new(0.5, -160, 0.5, -175)
+        MainMenu.Size = UDim2.new(0, 320, 0, 350)
+        MainMenu.Active = true
+        MainMenu.Draggable = false
+        Instance.new("UICorner", MainMenu).CornerRadius = UDim.new(0, 16)
+
+        local MainStroke = Instance.new("UIStroke", MainMenu)
+        MainStroke.Thickness = 2
+        MainStroke.Color = Color3.fromRGB(0, 230, 118)
+
+        ToggleLogo.MouseButton1Click:Connect(function()
+            MainMenu.Visible = not MainMenu.Visible
+        end)
+
+        -- Cabecera Mejorada: Avatar + Título + Créditos
+        local HeaderAvatar = Instance.new("ImageLabel", MainMenu)
+        HeaderAvatar.BackgroundTransparency = 1
+        HeaderAvatar.Position = UDim2.new(0.03, 0, 0.02, 0)
+        HeaderAvatar.Size = UDim2.new(0, 26, 0, 26)
+        pcall(function()
+            HeaderAvatar.Image = Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+        end)
+        Instance.new("UICorner", HeaderAvatar).CornerRadius = UDim.new(1, 0)
+
+        local TitleLabel = Instance.new("TextLabel", MainMenu)
+        TitleLabel.BackgroundTransparency = 1
+        TitleLabel.Position = UDim2.new(0.12, 0, 0.02, 0)
+        TitleLabel.Size = UDim2.new(0.38, 0, 0, 26)
+        TitleLabel.Font = Enum.Font.GothamBold
+        TitleLabel.Text = "ZETA V2.2"
+        TitleLabel.TextColor3 = Color3.fromRGB(0, 230, 118)
+        TitleLabel.TextSize, TitleLabel.TextXAlignment = 10, Enum.TextXAlignment.Left
+
+        local FPSLabel = Instance.new("TextLabel", MainMenu)
+        FPSLabel.BackgroundTransparency = 1
+        FPSLabel.Position = UDim2.new(0.46, 0, 0.02, 0)
+        FPSLabel.Size = UDim2.new(0.18, 0, 0, 26)
+        FPSLabel.Font = Enum.Font.Code
+        FPSLabel.Text = "FPS: 60"
+        FPSLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+        FPSLabel.TextSize = 9
+
+        -- Contador de FPS Real corregido sin quedarse pegado en 1
+        local lastTime = tick()
+        local frameCount = 0
+        local fpsConn
+        fpsConn = RunService.RenderStepped:Connect(function()
+            frameCount = frameCount + 1
+            local currentTime = tick()
+            if currentTime - lastTime >= 1 then
+                FPSLabel.Text = "FPS: " .. math.floor(frameCount / (currentTime - lastTime))
+                frameCount = 0
+                lastTime = currentTime
+            end
+        end)
+        table.insert(activeConnections, fpsConn)
+
+        local MinimizeBtn = Instance.new("TextButton", MainMenu)
+        MinimizeBtn.BackgroundColor3 = Color3.fromRGB(30, 38, 50)
+        MinimizeBtn.Position = UDim2.new(0.68, 0, 0.02, 0)
+        MinimizeBtn.Size = UDim2.new(0, 26, 0, 26)
+        MinimizeBtn.Font = Enum.Font.GothamBold
+        MinimizeBtn.Text = "-"
+        MinimizeBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
+        MinimizeBtn.TextSize = 14
+        Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 6)
+        MinimizeBtn.MouseButton1Click:Connect(function()
+            MainMenu.Visible = false
+        end)
+
+        local CloseBtn = Instance.new("TextButton", MainMenu)
+        CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+        CloseBtn.Position = UDim2.new(0.82, 0, 0.02, 0)
+        CloseBtn.Size = UDim2.new(0, 26, 0, 26)
+        CloseBtn.Font = Enum.Font.GothamBold
+        CloseBtn.Text = "X"
+        CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        CloseBtn.TextSize = 10
+        Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
+        CloseBtn.MouseButton1Click:Connect(function()
+            for _, conn in ipairs(activeConnections) do
+                if typeof(conn) == "RBXScriptConnection" then conn:Disconnect() end
+            end
+            HubGui:Destroy()
+        end)
+
+        -- Pestañas Superiores (Incluyendo AJUSTES)
+        local function createTab(nameKey, xPos, isDefault)
+            local btn = Instance.new("TextButton", MainMenu)
+            btn.BackgroundColor3 = isDefault and Color3.fromRGB(20, 26, 36) or Color3.fromRGB(12, 15, 22)
+            btn.Position = UDim2.new(xPos, 0, 0.11, 0)
+            btn.Size = UDim2.new(0.18, 0, 0, 24)
+            btn.Font = Enum.Font.GothamBold
+            btn.Name = "Tab_" .. nameKey
+            btn.Text = T(nameKey)
+            btn.TextColor3 = isDefault and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(150, 150, 150)
+            btn.TextSize = 7
+            Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+            return btn
+        end
+
+        local TabCombat = createTab("combat", 0.02, true)
+        local TabVisual = createTab("visual", 0.22, false)
+        local TabExtra = createTab("antilag", 0.42, false)
+        local TabSettings = createTab("settings", 0.62, false)
+        local TabDiscord = createTab("discord", 0.82, false)
+
+        local function createContainer()
+            local c = Instance.new("ScrollingFrame", MainMenu)
+            c.BackgroundTransparency = 1
+            c.Position = UDim2.new(0.03, 0, 0.19, 0)
+            c.Size = UDim2.new(0.94, 0, 0.78, 0)
+            c.CanvasSize = UDim2.new(0, 0, 1.2, 0)
+            c.ScrollBarThickness = 2
+            c.Visible = false
+            return c
+        end
+
+        local ContainerCombat = createContainer(); ContainerCombat.Visible = true
+        local ContainerVisual = createContainer()
+        local ContainerExtra = createContainer()
+        local ContainerSettings = createContainer()
+        local ContainerDiscord = createContainer()
+
+        local function switchTab(activeBtn, activeContainer)
+            for _, btn in ipairs({TabCombat, TabVisual, TabExtra, TabSettings, TabDiscord}) do
+                btn.BackgroundColor3 = Color3.fromRGB(12, 15, 22)
+                btn.TextColor3 = Color3.fromRGB(150, 150, 150)
+            end
+            for _, cont in ipairs({ContainerCombat, ContainerVisual, ContainerExtra, ContainerSettings, ContainerDiscord}) do
+                cont.Visible = false
+            end
+            activeBtn.BackgroundColor3 = Color3.fromRGB(20, 26, 36)
+            activeBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
+            activeContainer.Visible = true
+        end
+
+        TabCombat.MouseButton1Click:Connect(function() switchTab(TabCombat, ContainerCombat) end)
+        TabVisual.MouseButton1Click:Connect(function() switchTab(TabVisual, ContainerVisual) end)
+        TabExtra.MouseButton1Click:Connect(function() switchTab(TabExtra, ContainerExtra) end)
+        TabSettings.MouseButton1Click:Connect(function() switchTab(TabSettings, ContainerSettings) end)
+        TabDiscord.MouseButton1Click:Connect(function() switchTab(TabDiscord, ContainerDiscord) end)
+
+        -- --- PESTAÑA COMBATE ---
+        local AimbotEnabled = false
+        local TargetPart = "Head"
+        local PredictionEnabled = false
+
+        local BtnAim = Instance.new("TextButton", ContainerCombat)
+        BtnAim.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+        BtnAim.Size = UDim2.new(0.55, 0, 0, 26)
+        BtnAim.Font = Enum.Font.GothamBold
+        BtnAim.Text = T("aimbotOff")
+        BtnAim.TextColor3 = Color3.fromRGB(255, 90, 90)
+        BtnAim.TextSize = 8
+        Instance.new("UICorner", BtnAim).CornerRadius = UDim.new(0, 6)
+        BtnAim.MouseButton1Click:Connect(function()
+            AimbotEnabled = not AimbotEnabled
+            BtnAim.Text = AimbotEnabled and T("aimbotOn") or T("aimbotOff")
+            BtnAim.TextColor3 = AimbotEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
+        end)
+
+        local PartDropdownBtn = Instance.new("TextButton", ContainerCombat)
+        PartDropdownBtn.BackgroundColor3 = Color3.fromRGB(25, 32, 44)
+        PartDropdownBtn.Position = UDim2.new(0.58, 0, 0, 0)
+        PartDropdownBtn.Size = UDim2.new(0.42, 0, 0, 26)
+        PartDropdownBtn.Font = Enum.Font.GothamBold
+        PartDropdownBtn.Text = T("part") .. T("head") .. " v"
+        PartDropdownBtn.TextColor3 = Color3.fromRGB(255, 215, 0)
+        PartDropdownBtn.TextSize = 8
+        Instance.new("UICorner", PartDropdownBtn).CornerRadius = UDim.new(0, 6)
+
+        local DropdownList = Instance.new("Frame", ContainerCombat)
+        DropdownList.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+        DropdownList.Position = UDim2.new(0.58, 0, 0, 28)
+        DropdownList.Size = UDim2.new(0.42, 0, 0, 70)
+        DropdownList.Visible = false
+        DropdownList.ZIndex = 5
+        Instance.new("UICorner", DropdownList).CornerRadius = UDim.new(0, 6)
+        Instance.new("UIStroke", DropdownList).Color = Color3.fromRGB(0, 230, 118)
+
+        local function createOption(nameKey, partVal, yPos)
+            local opt = Instance.new("TextButton", DropdownList)
+            opt.BackgroundTransparency = 1
+            opt.Position = UDim2.new(0, 0, yPos, 0)
+            opt.Size = UDim2.new(1, 0, 0, 23)
+            opt.Font = Enum.Font.GothamMedium
+            opt.Name = "Opt_" .. nameKey
+            opt.Text = T(nameKey)
+            opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+            opt.TextSize = 8
+            opt.ZIndex = 6
+            opt.MouseButton1Click:Connect(function()
+                PartDropdownBtn.Text = T("part") .. T(nameKey) .. " v"
+                TargetPart = partVal
+                DropdownList.Visible = false
+            end)
+        end
+        createOption("head", "Head", 0)
+        createOption("torso", "UpperTorso", 0.33)
+        createOption("legs", "LeftLowerLeg", 0.66)
+
+        PartDropdownBtn.MouseButton1Click:Connect(function()
+            DropdownList.Visible = not DropdownList.Visible
+        end)
+
+        local BtnPred = Instance.new("TextButton", ContainerCombat)
+        BtnPred.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+        BtnPred.Position = UDim2.new(0, 0, 0.14, 0)
+        BtnPred.Size = UDim2.new(0.55, 0, 0, 26)
+        BtnPred.Font = Enum.Font.GothamBold
+        BtnPred.Text = T("predOff")
+        BtnPred.TextColor3 = Color3.fromRGB(255, 90, 90)
+        BtnPred.TextSize = 8
+        Instance.new("UICorner", BtnPred).CornerRadius = UDim.new(0, 6)
+        BtnPred.MouseButton1Click:Connect(function()
+            PredictionEnabled = not PredictionEnabled
+            BtnPred.Text = PredictionEnabled and T("predOn") or T("predOff")
+            BtnPred.TextColor3 = PredictionEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
+        end)
+
+        -- AUTO-SHOOT BLOQUEADO (Trabajando en esto / Working on this)
+        local BlockedShootBox = Instance.new("Frame", ContainerCombat)
+        BlockedShootBox.BackgroundColor3 = Color3.fromRGB(15, 18, 25)
+        BlockedShootBox.Position = UDim2.new(0.58, 0, 0.14, 0)
+        BlockedShootBox.Size = UDim2.new(0.42, 0, 0, 26)
+        Instance.new("UICorner", BlockedShootBox).CornerRadius = UDim.new(0, 6)
+        Instance.new("UIStroke", BlockedShootBox).Color = Color3.fromRGB(100, 100, 100)
+
+        local BlockedText = Instance.new("TextLabel", BlockedShootBox)
+        BlockedText.BackgroundTransparency = 1
+        BlockedText.Size = UDim2.new(1, 0, 1, 0)
+        BlockedText.Font = Enum.Font.GothamBold
+        BlockedText.Name = "BlockedTextElement"
+        BlockedText.Text = T("blocked")
+        BlockedText.TextColor3 = Color3.fromRGB(140, 140, 140)
+        BlockedText.TextSize, BlockedText.TextXAlignment = 6, Enum.TextXAlignment.Center
+
+        -- FOV Visual
+        local FOVEnabled = false
+        local FOVRgb = false
+        local FOVRadius = 110
+        local FOVMode = "Circulo"
+
+        local FOVGuiHolder = Instance.new("ScreenGui", CoreGui)
+        FOVGuiHolder.Name = "ZetaFOVUltimate"
+        FOVGuiHolder.ResetOnSpawn = false
+        
+        local FOVFrameUI = Instance.new("Frame", FOVGuiHolder)
+        FOVFrameUI.BackgroundTransparency = 1
+        FOVFrameUI.AnchorPoint = Vector2.new(0.5, 0.5)
+        FOVFrameUI.Position = UDim2.new(0.5, 0, 0.5, 0)
+        FOVFrameUI.Size = UDim2.new(0, FOVRadius*2, 0, FOVRadius*2)
+        
+        local UIStrokeFOV = Instance.new("UIStroke", FOVFrameUI)
+        UIStrokeFOV.Thickness = 2
+        UIStrokeFOV.Color = Color3.fromRGB(0, 230, 118)
+        local FOVCorner = Instance.new("UICorner", FOVFrameUI)
+        FOVCorner.CornerRadius = UDim.new(1, 0)
+
+        local FOVBtn = Instance.new("TextButton", ContainerCombat)
+        FOVBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+        FOVBtn.Position = UDim2.new(0, 0, 0.28, 0)
+        FOVBtn.Size = UDim2.new(0.55, 0, 0, 26)
+        FOVBtn.Font = Enum.Font.GothamBold
+        FOVBtn.Text = T("fovOff")
+        FOVBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
+        FOVBtn.TextSize = 8
+        Instance.new("UICorner", FOVBtn).CornerRadius = UDim.new(0, 6)
+        FOVBtn.MouseButton1Click:Connect(function()
+            FOVEnabled = not FOVEnabled
+            FOVGuiHolder.Enabled = FOVEnabled
+            FOVBtn.Text = FOVEnabled and T("fovOn") or T("fovOff")
+            FOVBtn.TextColor3 = FOVEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
+        end)
+        FOVGuiHolder.Enabled = false
+
+        local FOVModeBtn = Instance.new("TextButton", ContainerCombat)
+        FOVModeBtn.BackgroundColor3 = Color3.fromRGB(25, 32, 44)
+        FOVModeBtn.Position = UDim2.new(0.58, 0, 0.28, 0)
+        FOVModeBtn.Size = UDim2.new(0.42, 0, 0, 26)
+        FOVModeBtn.Font = Enum.Font.GothamBold
+        FOVModeBtn.Text = T("form") .. T("circle") .. " v"
+        FOVModeBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
+        FOVModeBtn.TextSize = 8
+        Instance.new("UICorner", FOVModeBtn).CornerRadius = UDim.new(0, 6)
+
+        FOVModeBtn.MouseButton1Click:Connect(function()
+            if FOVMode == "Circulo" then
+                FOVMode = "Cuadrado"
+                FOVCorner.CornerRadius = UDim.new(0, 4)
+                FOVModeBtn.Text = T("form") .. T("square") .. " v"
+            else
+                FOVMode = "Circulo"
+                FOVCorner.CornerRadius = UDim.new(1, 0)
+                FOVModeBtn.Text = T("form") .. T("circle") .. " v"
+            end
+        end)
+
+        local RGBFovBtn = Instance.new("TextButton", ContainerCombat)
+        RGBFovBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+        RGBFovBtn.Position = UDim2.new(0, 0, 0.41, 0)
+        RGBFovBtn.Size = UDim2.new(0.55, 0, 0, 26)
+        RGBFovBtn.Font = Enum.Font.GothamBold
+        RGBFovBtn.Text = T("rgbOff")
+        RGBFovBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
+        RGBFovBtn.TextSize = 8
+        Instance.new("UICorner", RGBFovBtn).CornerRadius = UDim.new(0, 6)
+        RGBFovBtn.MouseButton1Click:Connect(function()
+            FOVRgb = not FOVRgb
+            RGBFovBtn.Text = FOVRgb and T("rgbOn") or T("rgbOff")
+            RGBFovBtn.TextColor3 = FOVRgb and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
+        end)
+
+        local SliderLabel = Instance.new("TextLabel", ContainerCombat)
+        SliderLabel.BackgroundTransparency = 1
+        SliderLabel.Position = UDim2.new(0, 0, 0.54, 0)
+        SliderLabel.Size = UDim2.new(1, 0, 0, 16)
+        SliderLabel.Font = Enum.Font.Code
+        SliderLabel.Text = "[ FOV_SIZE: " .. FOVRadius .. " ]"
+        SliderLabel.TextColor3 = Color3.fromRGB(0, 255, 65)
+        SliderLabel.TextSize = 8
+
+        local SliderBack = Instance.new("Frame", ContainerCombat)
+        SliderBack.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+        SliderBack.Position = UDim2.new(0, 0, 0.63, 0)
+        SliderBack.Size = UDim2.new(1, 0, 0, 10)
+        Instance.new("UICorner", SliderBack).CornerRadius = UDim.new(0, 4)
+        Instance.new("UIStroke", SliderBack).Color = Color3.fromRGB(0, 255, 65)
+
+        local SliderFill = Instance.new("Frame", SliderBack)
+        SliderFill.BackgroundColor3 = Color3.fromRGB(0, 255, 65)
+        SliderFill.Size = UDim2.new(FOVRadius / 300, 0, 1, 0)
+        Instance.new("UICorner", SliderFill).CornerRadius = UDim.new(0, 4)
+
+        local function updateSlider(input)
+            if SliderBack.AbsoluteSize.X > 0 then
+                local posX = math.clamp(input.Position.X - SliderBack.AbsolutePosition.X, 0, SliderBack.AbsoluteSize.X)
+                local scale = posX / SliderBack.AbsoluteSize.X
+                SliderFill.Size = UDim2.new(scale, 0, 1, 0)
+                FOVRadius = math.floor(scale * 180) + 20
+                SliderLabel.Text = "[ FOV_SIZE: " .. FOVRadius .. " ]"
+            end
+        end
+
+        local draggingSlider = false
+        SliderBack.InputBegan:Connect(function(inp)
+            if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
+                draggingSlider = true
+                updateSlider(inp)
+            end
+        end)
+        UserInputService.InputEnded:Connect(function(inp)
+            if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
+                draggingSlider = false
+            end
+        end)
+        UserInputService.InputChanged:Connect(function(inp)
+            if draggingSlider and (inp.UserInputType == Enum.UserInputType.MouseMovement or inp.UserInputType == Enum.UserInputType.Touch) then
+                updateSlider(inp)
+            end
+        end)
+
+        local CharInfoBox = Instance.new("TextLabel", ContainerCombat)
+        CharInfoBox.BackgroundTransparency = 1
+        CharInfoBox.Position = UDim2.new(0, 0, 0.74, 0)
+        CharInfoBox.Size = UDim2.new(1, 0, 0, 50)
+        CharInfoBox.Font = Enum.Font.GothamMedium
+        CharInfoBox.TextWrapped = true
+        CharInfoBox.TextXAlignment = Enum.TextXAlignment.Left
+        CharInfoBox.TextYAlignment = Enum.TextYAlignment.Top
+        CharInfoBox.TextColor3 = Color3.fromRGB(220, 220, 220)
+        CharInfoBox.TextSize = 8
+
+        task.spawn(function()
+            while HubGui and HubGui.Parent do
+                pcall(function()
+                    local char = LocalPlayer.Character
+                    local hum = char and char:FindFirstChildOfClass("Humanoid")
+                    local hp = hum and math.floor(hum.Health) or 100
+                    local maxHp = hum and math.floor(hum.MaxHealth) or 100
+                    local ws = hum and math.floor(hum.WalkSpeed) or 16
+                    CharInfoBox.Text = T("op") .. LocalPlayer.Name .. "\n" .. T("hp") .. hp .. "/" .. maxHp .. " | " .. T("vel") .. ws
+                end)
+                task.wait(2.5)
+            end
+        end)
+
+        -- --- PESTAÑA VISUALES ---
+        local WallhackEnabled = false
+        local WHColorMode = "Green"
+
+        local WHBtn = Instance.new("TextButton", ContainerVisual)
+        WHBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+        WHBtn.Size = UDim2.new(0.55, 0, 0, 28)
+        WHBtn.Font = Enum.Font.GothamBold
+        WHBtn.Text = T("whOff")
+        WHBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
+        WHBtn.TextSize = 8
+        Instance.new("UICorner", WHBtn).CornerRadius = UDim.new(0, 6)
+        WHBtn.MouseButton1Click:Connect(function()
+            WallhackEnabled = not WallhackEnabled
+            WHBtn.Text = WallhackEnabled and T("whOn") or T("whOff")
+            WHBtn.TextColor3 = WallhackEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
+        end)
+
+        local WHDropdownBtn = Instance.new("TextButton", ContainerVisual)
+        WHDropdownBtn.BackgroundColor3 = Color3.fromRGB(25, 32, 44)
+        WHDropdownBtn.Position = UDim2.new(0.58, 0, 0, 0)
+        WHDropdownBtn.Size = UDim2.new(0.42, 0, 0, 28)
+        WHDropdownBtn.Font = Enum.Font.GothamBold
+        WHDropdownBtn.Text = T("color")
+        WHDropdownBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
+        WHDropdownBtn.TextSize = 8
+        Instance.new("UICorner", WHDropdownBtn).CornerRadius = UDim.new(0, 6)
+
+        local WHDropdownList = Instance.new("Frame", ContainerVisual)
+        WHDropdownList.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+        WHDropdownList.Position = UDim2.new(0.58, 0, 0, 30)
+        WHDropdownList.Size = UDim2.new(0.42, 0, 0, 90)
+        WHDropdownList.Visible = false
+        WHDropdownList.ZIndex = 5
+        Instance.new("UICorner", WHDropdownList).CornerRadius = UDim.new(0, 6)
+        Instance.new("UIStroke", WHDropdownList).Color = Color3.fromRGB(0, 230, 118)
+
+        local function createWHOption(nameKey, modeVal, yPos, col)
+            local opt = Instance.new("TextButton", WHDropdownList)
+            opt.BackgroundTransparency = 1
+            opt.Position = UDim2.new(0, 0, yPos, 0)
+            opt.Size = UDim2.new(1, 0, 0, 22)
+            opt.Font = Enum.Font.GothamMedium
+            opt.Name = "WHOpt_" .. nameKey
+            opt.Text = T(nameKey)
+            opt.TextColor3 = col
+            opt.TextSize = 8
+            opt.ZIndex = 6
+            opt.MouseButton1Click:Connect(function()
+                WHColorMode = modeVal
+                WHDropdownBtn.Text = T(nameKey) .. " v"
+                WHDropdownBtn.TextColor3 = col
+                WHDropdownList.Visible = false
+            end)
+        end
+        createWHOption("green", "Green", 0, Color3.fromRGB(0, 230, 118))
+        createWHOption("red", "Red", 0.25, Color3.fromRGB(255, 50, 50))
+        createWHOption("blue", "Blue", 0.50, Color3.fromRGB(50, 150, 255))
+        createWHOption("rgb", "RGB", 0.75, Color3.fromRGB(255, 215, 0))
+
+        WHDropdownBtn.MouseButton1Click:Connect(function()
+            WHDropdownList.Visible = not WHDropdownList.Visible
+        end)
+
+        local VisualInfoBox = Instance.new("TextLabel", ContainerVisual)
+        VisualInfoBox.BackgroundTransparency = 1
+        VisualInfoBox.Position = UDim2.new(0, 0, 0.38, 0)
+        VisualInfoBox.Size = UDim2.new(1, 0, 0, 75)
+        VisualInfoBox.Font = Enum.Font.GothamMedium
+        VisualInfoBox.TextWrapped = true
+        VisualInfoBox.TextXAlignment = Enum.TextXAlignment.Left
+        VisualInfoBox.TextYAlignment = Enum.TextYAlignment.Top
+        VisualInfoBox.TextColor3 = Color3.fromRGB(200, 200, 200)
+        VisualInfoBox.TextSize = 8
+        VisualInfoBox.Text = "ZETA HUB - ESP VISUAL\n• Resalta enemigos a través de paredes.\n• Soporta colores fijos y modo RGB."
+
+        -- --- PESTAÑA ANTI-LAG REVERSIBLE ---
+        local AntiLagBtn = Instance.new("TextButton", ContainerExtra)
+        AntiLagBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+        AntiLagBtn.Size = UDim2.new(1, 0, 0, 36)
+        AntiLagBtn.Font = Enum.Font.GothamBold
+        AntiLagBtn.Text = T("alOff")
+        AntiLagBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
+        AntiLagBtn.TextSize = 9
+        Instance.new("UICorner", AntiLagBtn).CornerRadius = UDim.new(0, 8)
+
+        local antiLagActive = false
+        local originalShadows = Lighting.GlobalShadows
+        local originalFogEnd = Lighting.FogEnd
+        local originalMaterials = {}
+
+        AntiLagBtn.MouseButton1Click:Connect(function()
+            antiLagActive = not antiLagActive
+            if antiLagActive then
+                AntiLagBtn.Text = T("alOn")
+                AntiLagBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
+                AntiLagBtn.BackgroundColor3 = Color3.fromRGB(20, 50, 30)
+                
+                pcall(function()
+                    originalShadows = Lighting.GlobalShadows
+                    originalFogEnd = Lighting.FogEnd
+                    Lighting.GlobalShadows = false
+                    Lighting.FogEnd = 999999
+                    
+                    for _, v in ipairs(workspace:GetDescendants()) do
+                        if v:IsA("BasePart") then
+                            originalMaterials[v] = v.Material
+                            v.Material = Enum.Material.SmoothPlastic
+                        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                            v.Enabled = false
+                        end
+                    end
+                end)
+            else
+                AntiLagBtn.Text = T("alOff")
+                AntiLagBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
+                AntiLagBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+                
+                pcall(function()
+                    Lighting.GlobalShadows = originalShadows
+                    Lighting.FogEnd = originalFogEnd
+                    
+                    for part, mat in pairs(originalMaterials) do
+                        if part and part.Parent then part.Material = mat end
+                    end
+                    table.clear(originalMaterials)
+
+                    for _, v in ipairs(workspace:GetDescendants()) do
+                        if v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                            v.Enabled = true
+                        end
+                    end
+                end)
+            end
+        end)
+
+        local ExtraInfo = Instance.new("TextLabel", ContainerExtra)
+        ExtraInfo.BackgroundTransparency = 1
+        ExtraInfo.Position = UDim2.new(0, 0, 0.35, 0)
+        ExtraInfo.Size = UDim2.new(1, 0, 0, 75)
+        ExtraInfo.Font = Enum.Font.GothamMedium
+        ExtraInfo.TextWrapped = true
+        ExtraInfo.TextXAlignment = Enum.TextXAlignment.Left
+        ExtraInfo.TextYAlignment = Enum.TextYAlignment.Top
+        ExtraInfo.TextColor3 = Color3.fromRGB(200, 200, 200)
+        ExtraInfo.TextSize = 8
+        ExtraInfo.Text = "ZETA HUB - OPTIMIZADOR MOVIL\n• Estabiliza FPS eliminando gráficos pesados.\n• 100% Reversible al apagar el botón."
+
+        -- --- PESTAÑA AJUSTES (MULTIIDIOMA REAL) ---
+        local SettingsTitle = Instance.new("TextLabel", ContainerSettings)
+        SettingsTitle.BackgroundTransparency = 1
+        SettingsTitle.Size = UDim2.new(1, 0, 0, 30)
+        SettingsTitle.Font = Enum.Font.GothamBold
+        SettingsTitle.Text = T("langTitle")
+        SettingsTitle.TextColor3 = Color3.fromRGB(0, 230, 118)
+        SettingsTitle.TextSize, SettingsTitle.TextXAlignment = 9, Enum.TextXAlignment.Center
+
+        local function applyLanguage(langCode)
+            currentLang = langCode
+            SettingsTitle.Text = T("langTitle")
+            BtnAim.Text = AimbotEnabled and T("aimbotOn") or T("aimbotOff")
+            BtnPred.Text = PredictionEnabled and T("predOn") or T("predOff")
+            FOVBtn.Text = FOVEnabled and T("fovOn") or T("fovOff")
+            RGBFovBtn.Text = FOVRgb and T("rgbOn") or T("rgbOff")
+            WHBtn.Text = WallhackEnabled and T("whOn") or T("whOff")
+            AntiLagBtn.Text = antiLagActive and T("alOn") or T("alOff")
+            BlockedText.Text = T("blocked")
+            TabCombat.Text = T("combat")
+            TabVisual.Text = T("visual")
+            TabExtra.Text = T("antilag")
+            TabSettings.Text = T("settings")
+            TabDiscord.Text = T("discord")
+            DiscBtn.Text = T("copyDisc")
+        end
+
+        local function createLangButton(name, langCode, yPos)
+            local lBtn = Instance.new("TextButton", ContainerSettings)
+            lBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
+            lBtn.Position = UDim2.new(0.05, 0, yPos, 0)
+            lBtn.Size = UDim2.new(0.9, 0, 0, 28)
+            lBtn.Font = Enum.Font.GothamBold
+            lBtn.Text = "🌐 " .. name
+            lBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            lBtn.TextSize = 9
+            Instance.new("UICorner", lBtn).CornerRadius = UDim.new(0, 6)
+            lBtn.MouseButton1Click:Connect(function()
+                applyLanguage(langCode)
+                lBtn.Text = "✅ ¡OK (" .. name .. ")!"
+                task.wait(1.2)
+                lBtn.Text = "🌐 " .. name
+            end)
+        end
+        createLangButton("Español", "es", 0.15)
+        createLangButton("English", "en", 0.32)
+        createLangButton("Français", "fr", 0.49)
+        createLangButton("Deutsch", "de", 0.66)
+        createLangButton("中文 (Chino)", "zh", 0.83)
+
+        -- --- PESTAÑA DISCORD ---
+        local DiscInfo = Instance.new("TextLabel", ContainerDiscord)
+        DiscInfo.BackgroundTransparency = 1
+        DiscInfo.Position = UDim2.new(0, 0, 0.05, 0)
+        DiscInfo.Size = UDim2.new(1, 0, 0, 32)
+        DiscInfo.Font = Enum.Font.GothamBold
+        DiscInfo.Text = "Comunidad Oficial Zeta Hub V2.2\nTikTok: @zeta hub"
+        DiscInfo.TextColor3 = Color3.fromRGB(200, 200, 200)
+        DiscInfo.TextSize = 9
+
+        local DiscBtn = Instance.new("TextButton", ContainerDiscord)
+        DiscBtn.BackgroundColor3 = Color3.fromRGB(0, 130, 250)
+        DiscBtn.Position = UDim2.new(0.05, 0, 0.30, 0)
+        DiscBtn.Size = UDim2.new(0.9, 0, 0, 34)
+        DiscBtn.Font = Enum.Font.GothamBold
+        DiscBtn.Text = T("copyDisc")
+        DiscBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        DiscBtn.TextSize = 10
+        Instance.new("UICorner", DiscBtn).CornerRadius = UDim.new(0, 8)
+        DiscBtn.MouseButton1Click:Connect(function()
+            if setclipboard then 
+                setclipboard(DiscordInvite)
+                DiscBtn.Text = T("copied")
+                task.wait(2)
+                DiscBtn.Text = T("copyDisc")
+            end
+        end)
+
+        -- // MOTOR LIGERO OPTIMIZADO // --
+        local hueVal = 0
+        local throttle = 0
+
+        local mainLoopConn
+        mainLoopConn = RunService.RenderStepped:Connect(function()
+            throttle = throttle + 1
+            
+            hueVal = (hueVal + 0.01) % 1
+            local currentRGBColor = Color3.fromHSV(hueVal, 1, 1)
+
+            FOVFrameUI.Size = UDim2.new(0, FOVRadius * 2, 0, FOVRadius * 2)
+            UIStrokeFOV.Color = FOVRgb and currentRGBColor or Color3.fromRGB(0, 230, 118)
+
+            if AimbotEnabled then
+                local closestTarget, shortestDist = nil, FOVRadius
+
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and obj ~= LocalPlayer.Character then
+                        local humanoid = obj:FindFirstChildOfClass("Humanoid")
+                        local rootPart = obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("Head")
+
+                        if humanoid and rootPart and humanoid.Health > 0 then
+                            local isPlayer = Players:GetPlayerFromCharacter(obj)
+                            local validTarget = true
+
+                            if isPlayer then
+                                if isPlayer == LocalPlayer or (isPlayer.Team and LocalPlayer.Team and isPlayer.Team == LocalPlayer.Team) then
+                                    validTarget = false
+                                end
+                            end
+
+                            if validTarget then
+                                local targetPartObj = obj:FindFirstChild(TargetPart) or rootPart
+                                if targetPartObj then
+                                    local pos, onScreen = Camera:WorldToViewportPoint(targetPartObj.Position)
+                                    if onScreen then
+                                        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                                        local dist = (Vector2.new(pos.X, pos.Y) - screenCenter).Magnitude
+                                        if dist < shortestDist then
+                                            shortestDist = dist
+                                            closestTarget = targetPartObj
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+
+                if closestTarget then
+                    local targetPosition = closestTarget.Position
+                    if PredictionEnabled and closestTarget.Parent and closestTarget.Parent:FindFirstChild("HumanoidRootPart") then
+                        local root = closestTarget.Parent.HumanoidRootPart
+                        targetPosition = targetPosition + (root.Velocity * 0.11)
+                    end
+                    Camera.CFrame = Camera.CFrame:Lerp(CFrame.new(Camera.CFrame.Position, targetPosition), 0.45)
+                end
+            end
+
+            if throttle % 4 == 0 then
+                local finalWHColor = Color3.fromRGB(0, 230, 118)
+                if WHColorMode == "Red" then finalWHColor = Color3.fromRGB(255, 50, 50)
+                elseif WHColorMode == "Blue" then finalWHColor = Color3.fromRGB(50, 150, 255)
+                elseif WHColorMode == "RGB" then finalWHColor = currentRGBColor end
+
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and obj ~= LocalPlayer.Character then
+                        local humanoid = obj:FindFirstChildOfClass("Humanoid")
+                        if humanoid and humanoid.Health > 0 then
+                            if WallhackEnabled then
+                                if not obj:FindFirstChild("ZetaUltimateHL") then
+                                    local hl = Instance.new("Highlight")
+                                    hl.Name = "ZetaUltimateHL"
+                                    hl.Adornee = obj
+                                    hl.FillColor = finalWHColor
+                                    hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+                                    hl.Parent = obj
+                                else
+                                    obj.ZetaUltimateHL.FillColor = finalWHColor
+                                end
+                            else
+                                if obj:FindFirstChild("ZetaUltimateHL") then
+                                    obj.ZetaUltimateHL:Destroy()
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+
+        table.insert(activeConnections, mainLoopConn)
+
+    else
+        VerifyBtn.Text = "[-] KEY INCORRECTA [-]"
+        VerifyBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+        task.wait(1.5)
+        VerifyBtn.Text = "[ VERIFICAR KEY ]"
+        VerifyBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 80)
+    end
+end)
