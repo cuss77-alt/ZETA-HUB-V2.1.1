@@ -1,5 +1,5 @@
 -- ========================================================
---    ZETA HUB V2.2.2 — ULTIMATE EDITION (SOUNDS + CONFIRM CLOSE)
+--    ZETA HUB V2.2.2 — ELITE ULTIMATE (FIXED ANTI-LAG)
 --    Desarrollado por: Kenny (@zeta hub)
 -- ========================================================
 
@@ -26,12 +26,12 @@ pcall(function()
     end
 end)
 
--- // FUNCIÓN DE EFECTOS DE SONIDO // --
+-- // FUNCIÓN DE SONIDO CLARO Y NÍTIDO ("PIPIPI" / CLICK) // --
 local function playSound(soundId, vol)
     pcall(function()
         local s = Instance.new("Sound", SoundService)
-        s.SoundId = soundId
-        s.Volume = vol or 0.5
+        s.SoundId = soundId or "rbxassetid://906107775"
+        s.Volume = vol or 0.8
         s:Play()
         task.delay(1.5, function() s:Destroy() end)
     end)
@@ -55,7 +55,8 @@ local texts = {
         copyDisc = "Copiar Link de Discord", copied = "¡Link copiado con exito!",
         langTitle = "IDIOMA / LANGUAGE / 语言",
         op = "OPERADOR: ", hp = "HP: ", vel = "VEL: ",
-        warn = "⚠️ ADVERTENCIA / WARNING\nNo abuses del script para evitar baneos.",
+        warnTitle = "SISTEMA DE ALERTA",
+        warnDesc = "No abuses del script para evitar baneos.",
         exitTitle = "⚠️ ¿ESTÁS SEGURO DE ESTO?",
         yesBtn = "SÍ", noBtn = "NO"
     },
@@ -74,7 +75,8 @@ local texts = {
         copyDisc = "Copy Discord Link", copied = "Link copied successfully!",
         langTitle = "LANGUAGE / IDIOMA / 语言",
         op = "OPERATOR: ", hp = "HP: ", vel = "SPD: ",
-        warn = "⚠️ WARNING / ADVERTENCIA\nDo not abuse the script to avoid bans.",
+        warnTitle = "SYSTEM ALERT",
+        warnDesc = "Do not abuse the script to avoid bans.",
         exitTitle = "⚠️ ARE YOU SURE ABOUT THIS?",
         yesBtn = "YES", noBtn = "NO"
     },
@@ -93,7 +95,8 @@ local texts = {
         copyDisc = "Copier le lien Discord", copied = "Lien copié avec succès !",
         langTitle = "LANGUE / LANGUAGE",
         op = "OPÉRATEUR: ", hp = "PV: ", vel = "VIT: ",
-        warn = "⚠️ AVERTISSEMENT\nN'abusez pas du script pour éviter les bannissements.",
+        warnTitle = "ALERTE SYSTÈME",
+        warnDesc = "N'abusez pas du script pour éviter les bannissements.",
         exitTitle = "⚠️ ÊTES-VOUS SÛR DE CELA ?",
         yesBtn = "OUI", noBtn = "NON"
     },
@@ -112,7 +115,8 @@ local texts = {
         copyDisc = "Discord-Link kopieren", copied = "Link erfolgreich kopiert!",
         langTitle = "SPRACHE / LANGUAGE",
         op = "BENUTZER: ", hp = "LP: ", vel = "GESW: ",
-        warn = "⚠️ WARNUNG\nMissbrauche das Script nicht, um Banns zu vermeiden.",
+        warnTitle = "SYSTEMALARM",
+        warnDesc = "Missbrauche das Script nicht, um Banns zu vermeiden.",
         exitTitle = "⚠️ BIST DU SICHER DARÜBER?",
         yesBtn = "JA", noBtn = "NEIN"
     },
@@ -131,7 +135,8 @@ local texts = {
         copyDisc = "复制 Discord 链接", copied = "链接复制成功！",
         langTitle = "语言 / LANGUAGE",
         op = "操作员: ", hp = "生命: ", vel = "速度: ",
-        warn = "⚠️ 警告\n请勿滥用脚本以防被封号。",
+        warnTitle = "系统警报",
+        warnDesc = "请勿滥用脚本以防被封号。",
         exitTitle = "⚠️ 你确定要这样做吗？",
         yesBtn = "是", noBtn = "否"
     }
@@ -142,7 +147,7 @@ local function T(key)
 end
 
 -- // 1. PANTALLA DE CARGA (16 SEGUNDOS) // --
-playSound("rbxassetid://9114221377", 0.6)
+playSound("rbxassetid://906107775", 0.9)
 
 local LoadGui = Instance.new("ScreenGui", CoreGui)
 LoadGui.Name = "ZetaLoadingV2"
@@ -299,7 +304,7 @@ GetKeyBtn.TextSize = 11
 Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 6)
 
 GetKeyBtn.MouseButton1Click:Connect(function()
-    playSound("rbxassetid://6895073653", 0.4)
+    playSound("rbxassetid://906107775", 0.8)
     if setclipboard then setclipboard(LinkvertiseURL) end
     GetKeyBtn.Text = "✅ ¡Link copiado al portapapeles!"
     task.wait(2)
@@ -308,10 +313,10 @@ end)
 
 VerifyBtn.MouseButton1Click:Connect(function()
     if KeyInput.Text == CorrectKey then
-        playSound("rbxassetid://4590657391", 0.6)
+        playSound("rbxassetid://906107775", 1.0)
         KeySystemUI:Destroy()
 
-        -- // 3. MENÚ PRINCIPAL CON SONIDOS Y CUADRO DE CONFIRMACIÓN DE SALIDA // --
+        -- // 3. MENÚ PRINCIPAL // --
         local HubGui = Instance.new("ScreenGui", CoreGui)
         HubGui.Name = "ZetaMenuV2"
         HubGui.ResetOnSpawn = false
@@ -333,28 +338,58 @@ VerifyBtn.MouseButton1Click:Connect(function()
         LogoStroke.Color = Color3.fromRGB(0, 230, 118)
         LogoStroke.Thickness = 2
 
-        -- Notificación Anti-Ban a los 60 segundos (Duración: 8 segundos)[span_0](start_span)[span_0](end_span)
+        -- Notificación Anti-Ban a los 60 segundos (Duración: 8 segundos)
         task.delay(60, function()
             if HubGui and HubGui.Parent then
-                playSound("rbxassetid://9114221377", 0.7)
-                local BanWarn = Instance.new("Frame", HubGui)
-                BanWarn.BackgroundColor3 = Color3.fromRGB(20, 10, 10)
-                BanWarn.Position = UDim2.new(0.5, -140, 0.02, 0)
-                BanWarn.Size = UDim2.new(0, 280, 0, 50)
-                Instance.new("UICorner", BanWarn).CornerRadius = UDim.new(0, 8)
-                local WarnStroke = Instance.new("UIStroke", BanWarn)
-                WarnStroke.Color = Color3.fromRGB(255, 50, 50)
+                playSound("rbxassetid://906107775", 1.0)
 
-                local WarnTxt = Instance.new("TextLabel", BanWarn)
-                WarnTxt.BackgroundTransparency = 1
-                WarnTxt.Size = UDim2.new(1, 0, 1, 0)
-                WarnTxt.Font = Enum.Font.GothamBold
-                WarnTxt.Text = T("warn")
-                WarnTxt.TextColor3 = Color3.fromRGB(255, 255, 255)
-                WarnTxt.TextSize, WarnTxt.TextXAlignment = 8, Enum.TextXAlignment.Center
+                local GameNotice = Instance.new("Frame", HubGui)
+                GameNotice.BackgroundColor3 = Color3.fromRGB(24, 28, 36)
+                GameNotice.BackgroundTransparency = 0.15
+                GameNotice.Position = UDim2.new(1.2, 0, 0.05, 0)
+                GameNotice.Size = UDim2.new(0, 260, 0, 60)
+                Instance.new("UICorner", GameNotice).CornerRadius = UDim.new(0, 8)
+                
+                local NoticeStroke = Instance.new("UIStroke", GameNotice)
+                NoticeStroke.Color = Color3.fromRGB(100, 110, 125)
+                NoticeStroke.Thickness = 1.5
+
+                local AccentBar = Instance.new("Frame", GameNotice)
+                AccentBar.BackgroundColor3 = Color3.fromRGB(230, 80, 80)
+                AccentBar.Size = UDim2.new(0, 4, 1, 0)
+                Instance.new("UICorner", AccentBar).CornerRadius = UDim.new(0, 4)
+
+                local NoticeTitle = Instance.new("TextLabel", GameNotice)
+                NoticeTitle.BackgroundTransparency = 1
+                NoticeTitle.Position = UDim2.new(0, 14, 0, 8)
+                NoticeTitle.Size = UDim2.new(1, -20, 0, 18)
+                NoticeTitle.Font = Enum.Font.GothamBold
+                NoticeTitle.Text = T("warnTitle")
+                NoticeTitle.TextColor3 = Color3.fromRGB(255, 120, 120)
+                NoticeTitle.TextSize, NoticeTitle.TextXAlignment = 9, Enum.TextXAlignment.Left
+
+                local NoticeDesc = Instance.new("TextLabel", GameNotice)
+                NoticeDesc.BackgroundTransparency = 1
+                NoticeDesc.Position = UDim2.new(0, 14, 0, 26)
+                NoticeDesc.Size = UDim2.new(1, -20, 0, 26)
+                NoticeDesc.Font = Enum.Font.GothamMedium
+                NoticeDesc.Text = T("warnDesc")
+                NoticeDesc.TextColor3 = Color3.fromRGB(210, 215, 225)
+                NoticeDesc.TextSize, NoticeDesc.TextXAlignment = 8, Enum.TextXAlignment.Left
+                NoticeDesc.TextWrapped = true
+
+                TweenService:Create(GameNotice, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                    Position = UDim2.new(1, -275, 0.05, 0)
+                }):Play()
 
                 task.delay(8, function()
-                    if BanWarn and BanWarn.Parent then BanWarn:Destroy() end
+                    if GameNotice and GameNotice.Parent then
+                        TweenService:Create(GameNotice, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+                            Position = UDim2.new(1.2, 0, 0.05, 0)
+                        }):Play()
+                        task.wait(0.4)
+                        GameNotice:Destroy()
+                    end
                 end)
             end
         end)
@@ -374,7 +409,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         MainStroke.Color = Color3.fromRGB(0, 230, 118)
 
         ToggleLogo.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.3)
+            playSound("rbxassetid://906107775", 0.8)
             MainMenu.Visible = not MainMenu.Visible
         end)
 
@@ -461,7 +496,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         SubTitleLabel.TextColor3 = Color3.fromRGB(180, 220, 190)
         SubTitleLabel.TextSize, SubTitleLabel.TextXAlignment = 7, Enum.TextXAlignment.Left
 
-        -- // CUADRO DE CONFIRMACIÓN DE SALIDA (SÍ / NO) // --
+        -- // CUADRO DE CONFIRMACIÓN DE SALIDA // --
         local CloseBtn = Instance.new("TextButton", HeaderContainer)
         CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
         CloseBtn.Position = UDim2.new(0.88, 0, 0.1, 0)
@@ -473,9 +508,8 @@ VerifyBtn.MouseButton1Click:Connect(function()
         Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
 
         CloseBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.5)
+            playSound("rbxassetid://906107775", 1.0)
             
-            -- Evitar duplicar cuadros si ya está abierto
             if HubGui:FindFirstChild("ZetaExitConfirm") then return end
 
             local ConfirmOverlay = Instance.new("Frame", HubGui)
@@ -500,7 +534,6 @@ VerifyBtn.MouseButton1Click:Connect(function()
             ConfirmText.TextSize, ConfirmText.TextXAlignment = 10, Enum.TextXAlignment.Center
             ConfirmText.ZIndex = 11
 
-            -- Botón SÍ
             local YesBtn = Instance.new("TextButton", ConfirmOverlay)
             YesBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
             YesBtn.Position = UDim2.new(0.1, 0, 0.6, 0)
@@ -512,7 +545,6 @@ VerifyBtn.MouseButton1Click:Connect(function()
             YesBtn.ZIndex = 11
             Instance.new("UICorner", YesBtn).CornerRadius = UDim.new(0, 6)
 
-            -- Botón NO
             local NoBtn = Instance.new("TextButton", ConfirmOverlay)
             NoBtn.BackgroundColor3 = Color3.fromRGB(30, 40, 55)
             NoBtn.Position = UDim2.new(0.52, 0, 0.6, 0)
@@ -525,7 +557,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
             Instance.new("UICorner", NoBtn).CornerRadius = UDim.new(0, 6)
 
             YesBtn.MouseButton1Click:Connect(function()
-                playSound("rbxassetid://6895073653", 0.5)
+                playSound("rbxassetid://906107775", 1.0)
                 for _, conn in ipairs(activeConnections) do
                     if typeof(conn) == "RBXScriptConnection" then conn:Disconnect() end
                 end
@@ -533,7 +565,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
             end)
 
             NoBtn.MouseButton1Click:Connect(function()
-                playSound("rbxassetid://6895073653", 0.3)
+                playSound("rbxassetid://906107775", 0.8)
                 ConfirmOverlay:Destroy()
             end)
         end)
@@ -559,7 +591,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
 
         local function applyButtonAnimation(btn)
             btn.MouseButton1Down:Connect(function()
-                playSound("rbxassetid://6895073653", 0.3)
+                playSound("rbxassetid://906107775", 0.8)
                 TweenService:Create(btn, TweenInfo.new(0.1), {Size = UDim2.new(btn.Size.X.Scale, btn.Size.X.Offset - 2, btn.Size.Y.Scale, btn.Size.Y.Offset - 2)}):Play()
             end)
             btn.MouseButton1Up:Connect(function()
@@ -606,7 +638,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         local TabDiscord = createSidebarTab("discord", 208, false)
 
         local function switchTab(activeBtn, activeContainer)
-            playSound("rbxassetid://6895073653", 0.3)
+            playSound("rbxassetid://906107775", 0.8)
             for _, btn in ipairs({TabCombat, TabVisual, TabExtra, TabCredits, TabSettings, TabDiscord}) do
                 btn.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
                 btn.TextColor3 = Color3.fromRGB(160, 160, 160)
@@ -641,7 +673,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         Instance.new("UICorner", BtnAim).CornerRadius = UDim.new(0, 6)
         applyButtonAnimation(BtnAim)
         BtnAim.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             AimbotEnabled = not AimbotEnabled
             BtnAim.Text = AimbotEnabled and T("aimbotOn") or T("aimbotOff")
             BtnAim.TextColor3 = AimbotEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
@@ -678,7 +710,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
             opt.TextSize = 8
             opt.ZIndex = 6
             opt.MouseButton1Click:Connect(function()
-                playSound("rbxassetid://6895073653", 0.3)
+                playSound("rbxassetid://906107775", 0.8)
                 PartDropdownBtn.Text = T("part") .. T(nameKey) .. " v"
                 TargetPart = partVal
                 DropdownList.Visible = false
@@ -689,7 +721,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         createOption("legs", "LeftLowerLeg", 0.66)
 
         PartDropdownBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.3)
+            playSound("rbxassetid://906107775", 0.8)
             DropdownList.Visible = not DropdownList.Visible
         end)
 
@@ -704,7 +736,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         Instance.new("UICorner", BtnPred).CornerRadius = UDim.new(0, 6)
         applyButtonAnimation(BtnPred)
         BtnPred.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             PredictionEnabled = not PredictionEnabled
             BtnPred.Text = PredictionEnabled and T("predOn") or T("predOff")
             BtnPred.TextColor3 = PredictionEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
@@ -758,7 +790,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         Instance.new("UICorner", FOVBtn).CornerRadius = UDim.new(0, 6)
         applyButtonAnimation(FOVBtn)
         FOVBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             FOVEnabled = not FOVEnabled
             FOVGuiHolder.Enabled = FOVEnabled
             FOVBtn.Text = FOVEnabled and T("fovOn") or T("fovOff")
@@ -777,7 +809,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         Instance.new("UICorner", RGBFovBtn).CornerRadius = UDim.new(0, 6)
         applyButtonAnimation(RGBFovBtn)
         RGBFovBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             FOVRgb = not FOVRgb
             RGBFovBtn.Text = FOVRgb and T("rgbOn") or T("rgbOff")
             RGBFovBtn.TextColor3 = FOVRgb and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
@@ -847,7 +879,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
         Instance.new("UICorner", WHBtn).CornerRadius = UDim.new(0, 6)
         applyButtonAnimation(WHBtn)
         WHBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             WallhackEnabled = not WallhackEnabled
             WHBtn.Text = WallhackEnabled and T("whOn") or T("whOff")
             WHBtn.TextColor3 = WallhackEnabled and Color3.fromRGB(0, 230, 118) or Color3.fromRGB(255, 90, 90)
@@ -884,7 +916,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
             opt.TextSize = 8
             opt.ZIndex = 6
             opt.MouseButton1Click:Connect(function()
-                playSound("rbxassetid://6895073653", 0.3)
+                playSound("rbxassetid://906107775", 0.8)
                 WHColorMode = modeVal
                 WHDropdownBtn.Text = T(nameKey) .. " v"
                 WHDropdownBtn.TextColor3 = col
@@ -897,11 +929,11 @@ VerifyBtn.MouseButton1Click:Connect(function()
         createWHOption("rgb", "RGB", 0.75, Color3.fromRGB(255, 215, 0))
 
         WHDropdownBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.3)
+            playSound("rbxassetid://906107775", 0.8)
             WHDropdownList.Visible = not WHDropdownList.Visible
         end)
 
-        -- --- PESTAÑA ANTI-LAG ---
+        -- --- PESTAÑA ANTI-LAG OPTIMIZADA (SIN CONGELAMIENTO) ---
         local AntiLagBtn = Instance.new("TextButton", ContainerExtra)
         AntiLagBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
         AntiLagBtn.Size = UDim2.new(1, 0, 0, 36)
@@ -918,42 +950,63 @@ VerifyBtn.MouseButton1Click:Connect(function()
         local originalMaterials = {}
 
         AntiLagBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             antiLagActive = not antiLagActive
             if antiLagActive then
                 AntiLagBtn.Text = T("alOn")
                 AntiLagBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
                 AntiLagBtn.BackgroundColor3 = Color3.fromRGB(20, 50, 30)
-                pcall(function()
-                    originalShadows = Lighting.GlobalShadows
-                    originalFogEnd = Lighting.FogEnd
-                    Lighting.GlobalShadows = false
-                    Lighting.FogEnd = 999999
-                    for _, v in ipairs(workspace:GetDescendants()) do
-                        if v:IsA("BasePart") then
-                            originalMaterials[v] = v.Material
-                            v.Material = Enum.Material.SmoothPlastic
-                        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-                            v.Enabled = false
+                
+                -- Ejecución segura por lotes (evita tirones de FPS en móviles)
+                task.spawn(function()
+                    pcall(function()
+                        originalShadows = Lighting.GlobalShadows
+                        originalFogEnd = Lighting.FogEnd
+                        Lighting.GlobalShadows = false
+                        Lighting.FogEnd = 999999
+                        
+                        local count = 0
+                        for _, v in ipairs(workspace:GetDescendants()) do
+                            count = count + 1
+                            if v:IsA("BasePart") then
+                                originalMaterials[v] = v.Material
+                                v.Material = Enum.Material.SmoothPlastic
+                            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                                v.Enabled = false
+                            end
+                            -- Cada 350 objetos descansa un micro-fotograma para no congelar el celular
+                            if count % 350 == 0 then
+                                RunService.Heartbeat:Wait()
+                            end
                         end
-                    end
+                    end)
                 end)
             else
                 AntiLagBtn.Text = T("alOff")
                 AntiLagBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
                 AntiLagBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
-                pcall(function()
-                    Lighting.GlobalShadows = originalShadows
-                    Lighting.FogEnd = originalFogEnd
-                    for part, mat in pairs(originalMaterials) do
-                        if part and part.Parent then part.Material = mat end
-                    end
-                    table.clear(originalMaterials)
-                    for _, v in ipairs(workspace:GetDescendants()) do
-                        if v:IsA("ParticleEmitter") or v:IsA("Trail") then
-                            v.Enabled = true
+                
+                task.spawn(function()
+                    pcall(function()
+                        Lighting.GlobalShadows = originalShadows
+                        Lighting.FogEnd = originalFogEnd
+                        local count = 0
+                        for part, mat in pairs(originalMaterials) do
+                            count = count + 1
+                            if part and part.Parent then 
+                                part.Material = mat 
+                            end
+                            if count % 350 == 0 then
+                                RunService.Heartbeat:Wait()
+                            end
                         end
-                    end
+                        table.clear(originalMaterials)
+                        for _, v in ipairs(workspace:GetDescendants()) do
+                            if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                                v.Enabled = true
+                            end
+                        end
+                    end)
                 end)
             end
         end)
@@ -1025,7 +1078,7 @@ Estamos preparando la próxima gran actualización con características exclusiv
             Instance.new("UICorner", lBtn).CornerRadius = UDim.new(0, 6)
             applyButtonAnimation(lBtn)
             lBtn.MouseButton1Click:Connect(function()
-                playSound("rbxassetid://6895073653", 0.4)
+                playSound("rbxassetid://906107775", 0.9)
                 applyLanguage(langCode)
             end)
         end
@@ -1047,7 +1100,7 @@ Estamos preparando la próxima gran actualización con características exclusiv
         Instance.new("UICorner", DiscBtn).CornerRadius = UDim.new(0, 8)
         applyButtonAnimation(DiscBtn)
         DiscBtn.MouseButton1Click:Connect(function()
-            playSound("rbxassetid://6895073653", 0.4)
+            playSound("rbxassetid://906107775", 0.9)
             if setclipboard then 
                 setclipboard(DiscordInvite)
                 DiscBtn.Text = T("copied")
@@ -1149,7 +1202,7 @@ Estamos preparando la próxima gran actualización con características exclusiv
         table.insert(activeConnections, mainLoopConn)
 
     else
-        playSound("rbxassetid://9114221377", 0.5)
+        playSound("rbxassetid://906107775", 1.0)
         VerifyBtn.Text = "[-] KEY INCORRECTA [-]"
         VerifyBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
         task.wait(1.5)
