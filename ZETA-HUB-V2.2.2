@@ -1,10 +1,21 @@
 -- ========================================================
---    ZETA HUB V2.2.2 — ELITE ULTIMATE (FIXED ANTI-LAG)
---    Desarrollado por: Kenny (@zeta hub)
+--    ZETA HUB V2.2.2 — EXTREME BOOST 60 FPS EDITION
+--    Desarrollado por: Kenny (@zeta hub) // OWNER: BOYFIRE347
 -- ========================================================
 
+-- KEY CIFRADA EN BYTES (Protegida para que no la roben a simple vista)
+local EncryptedKeyBytes = {90, 69, 84, 65, 45, 85, 78, 76, 73, 77, 73, 84, 69, 68, 45, 86, 50, 46, 50, 46, 50}
+
+local function DecryptKey(bytes)
+    local str = ""
+    for _, b in ipairs(bytes) do
+        str = str .. string.char(b)
+    end
+    return str
+end
+
 local LinkvertiseURL = "https://link-hub.net/10082672/H7YSmQVixmzs"
-local CorrectKey = "ZETA-V2-ULTIMATE"
+local CorrectKey = DecryptKey(EncryptedKeyBytes) -- ZETA-UNLIMITED-V2.2.2
 local DiscordInvite = "discord.gg/NWkDhcG2p"
 
 local Players = game:GetService("Players")
@@ -51,7 +62,7 @@ local texts = {
         rgbOn = "FOV RGB: ON", rgbOff = "FOV RGB: OFF",
         whOn = "Wallhack: ON", whOff = "Wallhack: OFF",
         color = "Color v", green = "Verde", red = "Rojo", blue = "Azul", rgb = "RGB",
-        alOn = "Anti-Lag Gama Baja: ON", alOff = "Anti-Lag Gama Baja: OFF",
+        alOn = "⚡ Anti-Lag EXTREMO (60 FPS): ON", alOff = "Anti-Lag Gama Baja: OFF",
         copyDisc = "Copiar Link de Discord", copied = "¡Link copiado con exito!",
         langTitle = "IDIOMA / LANGUAGE / 语言",
         op = "OPERADOR: ", hp = "HP: ", vel = "VEL: ",
@@ -71,7 +82,7 @@ local texts = {
         rgbOn = "FOV RGB: ON", rgbOff = "FOV RGB: OFF",
         whOn = "Wallhack: ON", whOff = "Wallhack: OFF",
         color = "Color v", green = "Green", red = "Red", blue = "Blue", rgb = "RGB",
-        alOn = "Low-End Anti-Lag: ON", alOff = "Low-End Anti-Lag: OFF",
+        alOn = "⚡ Extreme Anti-Lag (60 FPS): ON", alOff = "Low-End Anti-Lag: OFF",
         copyDisc = "Copy Discord Link", copied = "Link copied successfully!",
         langTitle = "LANGUAGE / IDIOMA / 语言",
         op = "OPERATOR: ", hp = "HP: ", vel = "SPD: ",
@@ -91,7 +102,7 @@ local texts = {
         rgbOn = "FOV RGB: ON", rgbOff = "FOV RGB: OFF",
         whOn = "Wallhack: ON", whOff = "Wallhack: OFF",
         color = "Couleur v", green = "Vert", red = "Rouge", blue = "Bleu", rgb = "RGB",
-        alOn = "Anti-Lag Basse Conso: ON", alOff = "Anti-Lag Basse Conso: OFF",
+        alOn = "⚡ Anti-Lag Extrême (60 FPS): ON", alOff = "Anti-Lag Basse Conso: OFF",
         copyDisc = "Copier le lien Discord", copied = "Lien copié avec succès !",
         langTitle = "LANGUE / LANGUAGE",
         op = "OPÉRATEUR: ", hp = "PV: ", vel = "VIT: ",
@@ -111,7 +122,7 @@ local texts = {
         rgbOn = "FOV RGB: AN", rgbOff = "FOV RGB: AUS",
         whOn = "Wallhack: AN", whOff = "Wallhack: AUS",
         color = "Farbe v", green = "Grün", red = "Rot", blue = "Blau", rgb = "RGB",
-        alOn = "Anti-Lag Low-End: AN", alOff = "Anti-Lag Low-End: AUS",
+        alOn = "⚡ Extrem Anti-Lag (60 FPS): AN", alOff = "Anti-Lag Low-End: AUS",
         copyDisc = "Discord-Link kopieren", copied = "Link erfolgreich kopiert!",
         langTitle = "SPRACHE / LANGUAGE",
         op = "BENUTZER: ", hp = "LP: ", vel = "GESW: ",
@@ -131,7 +142,7 @@ local texts = {
         rgbOn = "FOV RGB: 开启", rgbOff = "FOV RGB: 关闭",
         whOn = "透视: 开启", whOff = "透视: 关闭",
         color = "颜色 v", green = "绿色", red = "红色", blue = "蓝色", rgb = "RGB",
-        alOn = "低配防卡顿: 开启", alOff = "低配防卡顿: 关闭",
+        alOn = "⚡ 极致防卡顿 (60 FPS): 开启", alOff = "低配防卡顿: 关闭",
         copyDisc = "复制 Discord 链接", copied = "链接复制成功！",
         langTitle = "语言 / LANGUAGE",
         op = "操作员: ", hp = "生命: ", vel = "速度: ",
@@ -933,20 +944,21 @@ VerifyBtn.MouseButton1Click:Connect(function()
             WHDropdownList.Visible = not WHDropdownList.Visible
         end)
 
-        -- --- PESTAÑA ANTI-LAG OPTIMIZADA (SIN CONGELAMIENTO) ---
+        -- --- PESTAÑA ANTI-LAG EXTREMO (60 FPS BOOST) ---
         local AntiLagBtn = Instance.new("TextButton", ContainerExtra)
         AntiLagBtn.BackgroundColor3 = Color3.fromRGB(18, 23, 32)
         AntiLagBtn.Size = UDim2.new(1, 0, 0, 36)
         AntiLagBtn.Font = Enum.Font.GothamBold
         AntiLagBtn.Text = T("alOff")
         AntiLagBtn.TextColor3 = Color3.fromRGB(255, 90, 90)
-        AntiLagBtn.TextSize = 9
+        AntiLagBtn.TextSize = 8
         Instance.new("UICorner", AntiLagBtn).CornerRadius = UDim.new(0, 8)
         applyButtonAnimation(AntiLagBtn)
 
         local antiLagActive = false
         local originalShadows = Lighting.GlobalShadows
         local originalFogEnd = Lighting.FogEnd
+        local originalBrightness = Lighting.Brightness
         local originalMaterials = {}
 
         AntiLagBtn.MouseButton1Click:Connect(function()
@@ -957,25 +969,31 @@ VerifyBtn.MouseButton1Click:Connect(function()
                 AntiLagBtn.TextColor3 = Color3.fromRGB(0, 230, 118)
                 AntiLagBtn.BackgroundColor3 = Color3.fromRGB(20, 50, 30)
                 
-                -- Ejecución segura por lotes (evita tirones de FPS en móviles)
                 task.spawn(function()
                     pcall(function()
                         originalShadows = Lighting.GlobalShadows
                         originalFogEnd = Lighting.FogEnd
+                        originalBrightness = Lighting.Brightness
+                        
                         Lighting.GlobalShadows = false
                         Lighting.FogEnd = 999999
-                        
+                        Lighting.Brightness = 1
+                        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
                         local count = 0
                         for _, v in ipairs(workspace:GetDescendants()) do
                             count = count + 1
                             if v:IsA("BasePart") then
                                 originalMaterials[v] = v.Material
                                 v.Material = Enum.Material.SmoothPlastic
-                            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                                v.Reflectance = 0
+                            elseif v:IsA("Decal") or v:IsA("Texture") then
+                                v.Transparency = 1
+                            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") or v:IsA("Explosion") then
                                 v.Enabled = false
                             end
-                            -- Cada 350 objetos descansa un micro-fotograma para no congelar el celular
-                            if count % 350 == 0 then
+
+                            if count % 250 == 0 then
                                 RunService.Heartbeat:Wait()
                             end
                         end
@@ -990,19 +1008,25 @@ VerifyBtn.MouseButton1Click:Connect(function()
                     pcall(function()
                         Lighting.GlobalShadows = originalShadows
                         Lighting.FogEnd = originalFogEnd
+                        Lighting.Brightness = originalBrightness
+                        settings().Rendering.QualityLevel = Enum.QualityLevel.Automatic
+                        
                         local count = 0
                         for part, mat in pairs(originalMaterials) do
                             count = count + 1
                             if part and part.Parent then 
                                 part.Material = mat 
                             end
-                            if count % 350 == 0 then
+                            if count % 250 == 0 then
                                 RunService.Heartbeat:Wait()
                             end
                         end
                         table.clear(originalMaterials)
+
                         for _, v in ipairs(workspace:GetDescendants()) do
-                            if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                            if v:IsA("Decal") or v:IsA("Texture") then
+                                v.Transparency = 0
+                            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
                                 v.Enabled = true
                             end
                         end
@@ -1011,7 +1035,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
             end
         end)
 
-        -- --- PESTAÑA CRÉDITOS Y GUÍA DE USO (+2000 CARACTERES) ---
+        -- --- PESTAÑA CRÉDITOS Y GUÍA DE USO ---
         local CreditsBox = Instance.new("TextLabel", ContainerCredits)
         CreditsBox.BackgroundTransparency = 1
         CreditsBox.Size = UDim2.new(1, 0, 2.5, 0)
